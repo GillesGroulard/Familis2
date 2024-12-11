@@ -61,7 +61,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
 
       await assignReminder(reminderId, user.id);
       await fetchReminders();
-      setSuccess("You've taken charge of this reminder!");
+      setSuccess("Vous avez pris en charge ce rappel !");
     } catch (err) {
       console.error('Error assigning reminder:', err);
     }
@@ -71,7 +71,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
     try {
       await deleteReminder(reminderId);
       await fetchReminders();
-      setSuccess('Reminder has been removed');
+      setSuccess('Le rappel a été supprimé');
     } catch (err) {
       console.error('Error deleting reminder:', err);
     }
@@ -109,10 +109,10 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
               <CalendarIcon className="w-8 h-8 text-primary-600" />
             </div>
             <h2 className="text-xl font-semibold text-gray-800 mb-2">
-              Select a Family
+              Choisir une famille
             </h2>
             <p className="text-gray-600">
-              Choose a family from the sidebar to view their agenda
+              Choisissez une famille dans la barre latérale pour consulter son agenda.
             </p>
           </div>
         </div>
@@ -143,13 +143,13 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                   className="flex items-center justify-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
                 >
                   <Plus className="w-5 h-5" />
-                  <span>Add Reminder</span>
+                  <span>Ajouter un rappel</span>
                 </button>
               </div>
 
               {reminders.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
-                  No active reminders
+                  Aucun rappel actif
                 </div>
               ) : (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -202,7 +202,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                           className="flex items-center justify-center gap-2 w-full py-2 px-4 bg-primary-100 text-primary-700 rounded-lg hover:bg-primary-200 transition-colors font-medium"
                         >
                           <Check className="w-4 h-4" />
-                          I'll do it
+                          Je le fais !
                         </button>
                       )}
                     </div>
