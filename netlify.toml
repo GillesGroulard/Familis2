@@ -13,5 +13,5 @@
 
 [[redirects]]
   from = "/progressier.js"
-  to = "/sounds/progressier.js"
+  to = "/dist/progressier.js"
   status = 200
