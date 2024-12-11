@@ -31,7 +31,7 @@ export const ReminderList: React.FC<ReminderListProps> = ({ familyId }) => {
   if (reminders.length === 0) {
     return (
       <div className="text-center text-gray-500 py-8">
-        No reminders yet
+        Pas encore de rappels dans la liste
       </div>
     );
   }
@@ -65,7 +65,7 @@ export const ReminderList: React.FC<ReminderListProps> = ({ familyId }) => {
             <button
               onClick={() => deleteReminder(reminder.id)}
               className="text-gray-400 hover:text-red-500 transition-colors"
-              title="Delete reminder"
+              title="Supprimer le rappel"
             >
               <Trash2 className="w-5 h-5" />
             </button>
