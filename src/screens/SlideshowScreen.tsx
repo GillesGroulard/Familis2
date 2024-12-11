@@ -63,25 +63,28 @@ export const SlideshowScreen: React.FC<SlideshowScreenProps> = ({ familyId, setA
     paused: showReactions || showReminder || newPhotoAdded
   });
 
-  useEffect(() => {
+useEffect(() => {
     if (familyId) {
-      if (refreshIntervalRef.current) {
-        clearInterval(refreshIntervalRef.current);
-      }
-
-      refreshIntervalRef.current = setInterval(() => {
-        refreshPosts();
-        refreshReminders();
-      }, 300000);
-
-      return () => {
         if (refreshIntervalRef.current) {
-          clearInterval(refreshIntervalRef.current);
+            clearInterval(refreshIntervalRef.current);
         }
-      };
-    }
-  }, [familyId]);
 
+        refreshIntervalRef.current = setInterval(() => {
+            setTimeout(() => {
+                refreshPosts();
+                refreshReminders();
+                window.location.reload();
+            }, 200); // Décalage de 200ms
+        }, 300000); // Intervalle de 5 minutes
+
+        return () => {
+            if (refreshIntervalRef.current) {
+                clearInterval(refreshIntervalRef.current);
+            }
+        };
+    }
+}, [familyId]);
+  
   useEffect(() => {
     const checkReminders = async () => {
       if (!familyId) return;
