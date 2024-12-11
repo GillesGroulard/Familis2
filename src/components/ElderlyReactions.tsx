@@ -8,10 +8,10 @@ interface ElderlyReactionsProps {
 }
 
 const EMOJI_LABELS = {
-  'Coeur': '❤️',
-  'Content(e)': '😊',
-  'Waow': '🤗',
-  'Fierté': '👏'
+  'LOVE': '❤️',
+  'HAPPY': '😊',
+  'HUG': '🤗',
+  'PROUD': '👏'
 } as const;
 
 export const ElderlyReactions: React.FC<ElderlyReactionsProps> = ({ reactions }) => {
