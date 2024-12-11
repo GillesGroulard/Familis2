@@ -89,7 +89,7 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
             className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             required
           >
-            <option value="">Choose a family</option>
+            <option value="">Sélectionner une famille</option>
             {families.map((family) => (
               <option key={family.id} value={family.id}>
                 {family.display_name || family.name}
@@ -184,10 +184,10 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
             }}
             className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           >
-            <option value="NONE">One-time reminder</option>
-            <option value="DAILY">Daily</option>
-            <option value="WEEKLY">Weekly</option>
-            <option value="MONTHLY">Monthly</option>
+            <option value="NONE">Un rappel unique</option>
+            <option value="DAILY">Journalier</option>
+            <option value="WEEKLY">Hebdomadaire</option>
+            <option value="MONTHLY">Mensuel</option>
           </select>
 
           {recurrenceType === 'MONTHLY' && (
