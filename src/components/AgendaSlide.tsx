@@ -43,11 +43,11 @@ export const AgendaSlide: React.FC<AgendaSlideProps> = ({ reminders }) => {
             {format(now, 'EEEE', { locale: fr })}  {/* Locale française pour le jour */}
           </h1>
           <h2 className="text-3xl md:text-4xl text-blue-800 mb-4">
-            {format(now, 'MMMM d, yyyy', { locale: fr })}  {/* Locale française pour le mois et la date */}
+            {format(now, 'd MMMM yyyy', { locale: fr })}  {/* Locale française pour le mois et la date */}
           </h2>
           <div className="flex items-center justify-center gap-3 text-2xl md:text-3xl text-blue-600">
             <Clock className="w-6 h-6 md:w-8 md:h-8" />
-            <span>{format(now, 'h:mm a', { locale: fr })}</span>  {/* Locale française pour l'heure */}
+            <span>{format(now, 'HH:mm', { locale: fr })}</span>  {/* Heure en format 24h */}
           </div>
         </div>
       </div>
@@ -75,11 +75,11 @@ export const AgendaSlide: React.FC<AgendaSlideProps> = ({ reminders }) => {
                   >
                     <div className="flex flex-col md:flex-row md:items-center justify-between mb-2 md:mb-3">
                       <span className="text-xl md:text-2xl font-medium text-blue-800">
-                        {format(new Date(reminder.date), 'EEEE, MMMM d', { locale: fr })} {/* Locale française pour la date */}
+                        {format(new Date(reminder.date), 'EEEE, d MMMM', { locale: fr })} {/* Locale française pour la date */}
                       </span>
                       {reminder.time && (
                         <span className="text-lg md:text-xl text-blue-600 font-medium">
-                          {format(new Date(`2000-01-01T${reminder.time}`), 'h:mm a', { locale: fr })}  {/* Locale française pour l'heure */}
+                          {format(new Date(`2000-01-01T${reminder.time}`), 'HH:mm', { locale: fr })}  {/* Heure en format 24h */}
                         </span>
                       )}
                     </div>
@@ -88,9 +88,9 @@ export const AgendaSlide: React.FC<AgendaSlideProps> = ({ reminders }) => {
                     </p>
                     {reminder.recurrence_type !== 'NONE' && (
                       <div className="mt-2 text-sm text-blue-500 font-medium">
-                        {reminder.recurrence_type === 'DAILY' && '🔄 Repeats daily'}
-                        {reminder.recurrence_type === 'WEEKLY' && '🔄 Repeats weekly'}
-                        {reminder.recurrence_type === 'MONTHLY' && `🔄 Repeats monthly on day ${reminder.recurrence_day}`}
+                        {reminder.recurrence_type === 'DAILY' && '🔄 Répète quotidiennement'}
+                        {reminder.recurrence_type === 'WEEKLY' && '🔄 Répète hebdomadairement'}
+                        {reminder.recurrence_type === 'MONTHLY' && `🔄 Répète mensuellement le jour ${reminder.recurrence_day}`}
                       </div>
                     )}
                   </div>
@@ -102,7 +102,7 @@ export const AgendaSlide: React.FC<AgendaSlideProps> = ({ reminders }) => {
                   Rien de prévu pour le moment
                 </div>
                 <p className="text-lg text-blue-500">
-                  Profiter d'une belle semaine ! 😊
+                  Profite d'une belle semaine ! 😊
                 </p>
               </div>
             )}
@@ -112,4 +112,5 @@ export const AgendaSlide: React.FC<AgendaSlideProps> = ({ reminders }) => {
     </div>
   );
 };
+
 
