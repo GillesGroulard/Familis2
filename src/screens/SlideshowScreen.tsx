@@ -75,7 +75,7 @@ useEffect(() => {
                 refreshReminders();
                 window.location.reload();
             }, 200); // Décalage de 200ms
-        }, 300000); // Intervalle de 5 minutes
+        }, 390000); // Intervalle de 5 minutes
 
         return () => {
             if (refreshIntervalRef.current) {
