@@ -25,19 +25,21 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({ onClose }) => {
           </h2>
         </div>
 
-        <div className="text-center">
-          <p className="text-gray-600 mb-6">
-            Aidez nous en nous partageant vos retours !
-          </p>
-          {/* Placeholder for Google Forms integration */}
-          <button
-            className="w-full bg-primary-500 text-white py-3 px-4 rounded-lg font-medium 
+    <div className="text-center">
+  <p className="text-gray-600 mb-6">
+    Aidez nous en nous partageant vos retours !
+  </p>
+  {/* Placeholder for Google Forms integration */}
+  <button
+    className="w-full bg-primary-500 text-white py-3 px-4 rounded-lg font-medium 
               hover:bg-primary-600 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 
               transition-colors"
-            onClick={() => {https://docs.google.com/forms/d/1TaSu8Ps3KgSoenLEoTKd65u-AbixdBaY9ly2hy0eFPE/edit
-              console.log('Open feedback form');
-            }}
-          >
+    onClick={() => {
+      // Redirige vers le formulaire Google Forms
+      window.open('https://docs.google.com/forms/d/e/1FAIpQLSf6BWLJzcvUXYyamF0LlYrVHeKQTDd5h59N_aQiaXkQUrKXrw/viewform', '_blank');
+      console.log('Open feedback form');
+    }}
+  >
             Ouvrir le formulaire
           </button>
         </div>
