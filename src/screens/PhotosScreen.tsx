@@ -43,7 +43,7 @@ export const PhotosScreen = () => {
           }`}
         >
           <Users className="w-5 h-5" />
-          Add Photos
+          Poster
         </button>
         <button
           onClick={() => setActiveSection('reminders')}
@@ -54,7 +54,7 @@ export const PhotosScreen = () => {
           }`}
         >
           <Clock className="w-5 h-5" />
-          Add Reminders
+          Ajouter des rappels
         </button>
       </div>
 
