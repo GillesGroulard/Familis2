@@ -48,10 +48,10 @@ export const FeedScreen: React.FC<FeedScreenProps> = ({ familyId }) => {
               <Users className="w-8 h-8 text-primary-600" />
             </div>
             <h2 className="text-xl font-semibold text-gray-800 mb-2">
-              Select a Family
+              Choisir une famille
             </h2>
             <p className="text-gray-600 mb-6">
-              Choose a family from the sidebar to view their posts
+              Choisissez une famille dans la barre latérale pour voir les posts.
             </p>
           </div>
         </div>
@@ -96,16 +96,16 @@ export const FeedScreen: React.FC<FeedScreenProps> = ({ familyId }) => {
               <Users className="w-8 h-8 text-primary-600" />
             </div>
             <h2 className="text-xl font-semibold text-gray-800 mb-2">
-              No Posts Yet
+              Pas encore de post
             </h2>
             <p className="text-gray-600 mb-6">
-              Be the first one to share a moment with your family!
+              Soyez le premier à partager un moment avec votre famille !
             </p>
             <button
               onClick={() => window.location.hash = 'photos'}
               className="bg-primary-500 text-white px-6 py-2 rounded-lg hover:bg-primary-600 transition-colors"
             >
-              Share a Photo
+              Poster
             </button>
           </div>
         ) : (
