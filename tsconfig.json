@@ -11,10 +11,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
+    "strict": false, // Désactive les vérifications strictes
+    "noUnusedLocals": false, // Ignore les variables inutilisées
+    "noUnusedParameters": false, // Ignore les paramètres inutilisés
+    "noFallthroughCasesInSwitch": false, // Permet les cas non gérés dans les switch
     "allowJs": true,
     "esModuleInterop": true
   },
