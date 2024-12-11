@@ -202,7 +202,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                           className="flex items-center justify-center gap-2 w-full py-2 px-4 bg-primary-100 text-primary-700 rounded-lg hover:bg-primary-200 transition-colors font-medium"
                         >
                           <Check className="w-4 h-4" />
-                          Je le fais !
+                          Je m'en occupe !
                         </button>
                       )}
                     </div>
@@ -216,7 +216,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100">
             <div className="p-6">
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-semibold text-gray-800">Calendar</h2>
+                <h2 className="text-2xl font-semibold text-gray-800">Calendrier</h2>
                 <div className="flex items-center gap-4">
                   <button
                     onClick={handlePrevMonth}
