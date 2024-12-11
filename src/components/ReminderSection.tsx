@@ -69,7 +69,7 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
         <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
           <Clock className="w-5 h-5 text-primary-600" />
         </div>
-        <h3 className="text-lg font-semibold text-gray-800">Add Reminder</h3>
+        <h3 className="text-lg font-semibold text-gray-800">Ajouter un rappel</h3>
       </div>
 
       {error && (
@@ -81,7 +81,7 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Select Family
+            Sélectionner une famille
           </label>
           <select
             value={selectedFamilyId}
@@ -108,7 +108,7 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
             className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             rows={3}
             required
-            placeholder="Enter reminder description"
+            placeholder="Entrer la description du rappel"
           />
         </div>
 
@@ -132,7 +132,7 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Time (optional)
+              Horaire (optional)
             </label>
             <div className="relative">
               <input
@@ -148,7 +148,7 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Show Reminder To
+            Le rappel est pour 
           </label>
           <div className="grid grid-cols-2 gap-4">
             <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
@@ -158,7 +158,7 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
                 onChange={() => handleAudienceToggle('ELDER')}
                 className="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500"
               />
-              <span className="ml-2 text-sm text-gray-700">Elder (Slideshow)</span>
+              <span className="ml-2 text-sm text-gray-700">L'ainé (Diaporama)</span>
             </label>
             <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
               <input
@@ -167,14 +167,14 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
                 onChange={() => handleAudienceToggle('FAMILY')}
                 className="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500"
               />
-              <span className="ml-2 text-sm text-gray-700">Family (Feed)</span>
+              <span className="ml-2 text-sm text-gray-700">La famille (Agenda)</span>
             </label>
           </div>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Recurrence
+            Récurrence
           </label>
           <select
             value={recurrenceType}
@@ -225,7 +225,7 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
           ) : (
             <>
               <Plus className="w-5 h-5" />
-              Add Reminder
+              Ajouter le rappel
             </>
           )}
         </button>
