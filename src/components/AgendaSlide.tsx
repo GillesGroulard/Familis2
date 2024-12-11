@@ -57,7 +57,7 @@ export const AgendaSlide: React.FC<AgendaSlideProps> = ({ reminders }) => {
           <div className="flex items-center gap-3 mb-6 md:mb-8 animate-fade-in">
             <Calendar className="w-8 h-8 md:w-10 md:h-10 text-blue-600" />
             <h2 className="text-2xl md:text-3xl font-semibold text-blue-800">
-              This Week's Schedule
+              Le Programme de la semaine
             </h2>
           </div>
 
@@ -98,10 +98,10 @@ export const AgendaSlide: React.FC<AgendaSlideProps> = ({ reminders }) => {
             ) : (
               <div className="text-center py-8 md:py-12 animate-fade-in">
                 <div className="text-xl md:text-2xl text-blue-600 mb-4">
-                  No scheduled reminders for this week
+                  Rien de prévu pour le moment
                 </div>
                 <p className="text-lg text-blue-500">
-                  Enjoy your peaceful week ahead! 😊
+                  Profiter d'une belle semaine ! 😊
                 </p>
               </div>
             )}
