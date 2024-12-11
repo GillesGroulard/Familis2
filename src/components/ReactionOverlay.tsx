@@ -2,10 +2,10 @@ import React from 'react';
 import { X } from 'lucide-react';
 
 const REACTIONS = [
-  { emoji: '❤️', type: 'LOVE', label: 'Love' },
-  { emoji: '😊', type: 'SMILE', label: 'Happy' },
-  { emoji: '🤗', type: 'HUG', label: 'Hug' },
-  { emoji: '👏', type: 'PROUD', label: 'Proud' }
+  { emoji: '❤️', type: 'LOVE', label: 'Coeur' },
+  { emoji: '😊', type: 'SMILE', label: 'Content(e)' },
+  { emoji: '🤗', type: 'HUG', label: 'Waow' },
+  { emoji: '👏', type: 'PROUD', label: 'Fierté' }
 ] as const;
 
 interface ReactionOverlayProps {
@@ -32,7 +32,7 @@ export const ReactionOverlay: React.FC<ReactionOverlayProps> = ({
         </button>
 
         <h2 className="text-2xl font-semibold text-center mb-8">
-          How do you feel about this photo?
+          Qu'en pensez-vous ?
         </h2>
 
         <div className="grid grid-cols-2 gap-6">
