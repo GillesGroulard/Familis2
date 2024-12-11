@@ -4,6 +4,7 @@
 
 [build.environment]
   NODE_VERSION = "18"
+  TS_NODE_TRANSPILE_ONLY = "true"
 
 [[redirects]]
   from = "/*"
