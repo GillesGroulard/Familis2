@@ -39,7 +39,7 @@ export const AuthScreen = () => {
             onClick={() => setMode('login')}
             className="mt-2 w-full text-center text-sm text-primary-500 hover:text-primary-400"
           >
-            ← Back to login
+            ← Retour au login
           </button>
         )}
       </div>
