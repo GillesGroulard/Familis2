@@ -13,5 +13,10 @@
 
 [[redirects]]
   from = "/progressier.js"
+  to = "/progressier.js"
+  status = 200
+  
+[[redirects]]
+  from = "/progressier.js"
   to = "/dist/progressier.js"
   status = 200
