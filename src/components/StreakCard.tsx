@@ -8,7 +8,7 @@ interface StreakCardProps {
 
 export const StreakCard: React.FC<StreakCardProps> = ({ streak, lastPostDate }) => {
   const getStreakStatus = () => {
-    if (!lastPostDate) return 'Partagez une photo pour commencer vos flammes!';
+      if (!lastPostDate) return 'Start your streak by sharing your first photo!';
     
     const today = new Date().toISOString().split('T')[0];
     const lastPost = new Date(lastPostDate).toISOString().split('T')[0];
@@ -16,9 +16,9 @@ export const StreakCard: React.FC<StreakCardProps> = ({ streak, lastPostDate }) 
       (new Date(today).getTime() - new Date(lastPost).getTime()) / (1000 * 60 * 60 * 24)
     );
 
-    if (daysSinceLastPost === 0) return "Vous avez posté aujourdh'ui ! 🎉";
-    if (daysSinceLastPost === 1) return 'Postez pour maintenir vos flammes !';
-    return 'Postez aujourd'hui pour obtenir une flamme!';
+    if (daysSinceLastPost === 0) return "You've posted today! 🎉";
+    if (daysSinceLastPost === 1) return 'Post today to keep your streak alive!';
+    return 'Post today to start a new streak!';
   };
 
   const formatDate = (date: string) => {
