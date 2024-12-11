@@ -18,7 +18,7 @@ export const PhotosScreen = () => {
     try {
       setError(null);
       await createPost(newPost, familyIds);
-      setSuccessMessage('Photo successfully shared with your family!');
+      setSuccessMessage('Photo partagée avec succès avec votre famille !');
     } catch (err) {
       console.error('Error creating post:', err);
       setError(err instanceof Error ? err.message : 'Failed to create post');
@@ -27,7 +27,7 @@ export const PhotosScreen = () => {
   };
 
   const handleReminderSuccess = () => {
-    setSuccessMessage('Reminder successfully added!');
+    setSuccessMessage('Rappel ajouté avec succès !');
   };
 
   return (
