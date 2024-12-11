@@ -284,7 +284,7 @@ export const MediaUpload: React.FC<MediaUploadProps> = ({ onSubmit }) => {
                 <Video className="w-8 h-8" />
               </div>
               <span className="text-sm font-medium">
-                Click to upload a photo or video
+                Cliquer pour ajouter une photo/vidéo
               </span>
               <span className="text-xs text-gray-400 mt-1">
                 Max size: 10MB
@@ -305,7 +305,7 @@ export const MediaUpload: React.FC<MediaUploadProps> = ({ onSubmit }) => {
 
       <div className="space-y-2">
         <label className="block text-sm font-medium text-gray-700">
-          Share with families
+          Partager avec votre famille
         </label>
         <div className="space-y-2">
           {families.map((family) => (
@@ -344,7 +344,7 @@ export const MediaUpload: React.FC<MediaUploadProps> = ({ onSubmit }) => {
             Sharing...
           </>
         ) : (
-          'Share with Family'
+          'Partager avec votre famille'
         )}
       </button>
     </form>
