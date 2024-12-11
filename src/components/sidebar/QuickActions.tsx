@@ -54,7 +54,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
         >
           <PlaySquare className="w-5 h-5" />
         </button>
-        <span className="text-xs text-gray-600 mt-1">Slideshow</span>
+        <span className="text-xs text-gray-600 mt-1">Diaporama</span>
       </div>
 
       <div className="w-8 border-t border-gray-200 my-2"></div>
