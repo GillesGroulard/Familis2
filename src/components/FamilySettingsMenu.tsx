@@ -99,7 +99,7 @@ export const FamilySettingsMenu: React.FC<FamilySettingsMenuProps> = ({
         </button>
 
         <h3 className="text-lg font-semibold text-gray-800 mb-6">
-          Family Settings
+          Paramètres de famille
         </h3>
 
         {error && (
@@ -111,7 +111,7 @@ export const FamilySettingsMenu: React.FC<FamilySettingsMenuProps> = ({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Family Picture
+              Photo de la famille
             </label>
             <div className="flex items-center gap-2">
               <label className="flex-1">
@@ -135,7 +135,7 @@ export const FamilySettingsMenu: React.FC<FamilySettingsMenuProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Number of Photos to Display
+              Nombre de photos à afficher
             </label>
             <select
               value={photoLimit}
@@ -150,7 +150,7 @@ export const FamilySettingsMenu: React.FC<FamilySettingsMenuProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Photo Display Duration
+              Vitesse de rotation
             </label>
             <select
               value={slideshowSpeed}
