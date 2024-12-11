@@ -51,19 +51,19 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab, f
       <div className="flex items-end justify-between">
         <NavItem
           icon={<Home className="w-6 h-6" />}
-          label="Feed"
+          label="Actualité"
           active={activeTab === 'feed'}
           onClick={() => setActiveTab('feed')}
         />
         <NavItem
           icon={<Users className="w-6 h-6" />}
-          label="Join Family"
+          label="Paramètres de famille"
           active={activeTab === 'join'}
           onClick={() => setActiveTab('join')}
         />
         <NavItem
           icon={<ImagePlus className="w-6 h-6" />}
-          label="Add Photos"
+          label="Poster"
           active={activeTab === 'photos'}
           onClick={() => setActiveTab('photos')}
           primary
