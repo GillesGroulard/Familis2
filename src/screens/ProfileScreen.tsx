@@ -29,7 +29,7 @@ export const ProfileScreen = () => {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      setError('Photo must be less than 5MB');
+      setError('La photo doit être inférieure à 5 MB');
       return;
     }
 
@@ -52,7 +52,7 @@ export const ProfileScreen = () => {
         .getPublicUrl(filePath);
 
       await updateProfile({ avatar_url: publicUrl });
-      setSuccess('Profile photo updated successfully');
+      setSuccess('Mise à jour réussie de la photo de profil');
     } catch (err) {
       console.error('Error updating profile photo:', err);
       setError(err instanceof Error ? err.message : 'Failed to update profile photo');
@@ -69,7 +69,7 @@ export const ProfileScreen = () => {
       setUpdating(true);
       setError(null);
       await updateProfile({ name: newName.trim() });
-      setSuccess('Name updated successfully');
+      setSuccess('Nom mis à jour avec succès');
       setIsEditingName(false);
     } catch (err) {
       console.error('Error updating name:', err);
@@ -87,7 +87,7 @@ export const ProfileScreen = () => {
       setUpdating(true);
       setError(null);
       await updateProfile({ email: newEmail.trim() });
-      setSuccess('Email updated successfully');
+      setSuccess('Email mis à jour avec succès');
       setIsEditingEmail(false);
     } catch (err) {
       console.error('Error updating email:', err);
@@ -100,7 +100,7 @@ export const ProfileScreen = () => {
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      setError('New passwords do not match');
+      setError('Les nouveaux mots de passe ne correspondent pas');
       return;
     }
 
@@ -108,7 +108,7 @@ export const ProfileScreen = () => {
       setUpdating(true);
       setError(null);
       await updatePassword(newPassword);
-      setSuccess('Password updated successfully');
+      setSuccess('Mot de passe mis à jour avec succès');
       setShowPasswordModal(false);
       setNewPassword('');
       setConfirmPassword('');
@@ -289,7 +289,7 @@ export const ProfileScreen = () => {
               <Settings className="w-5 h-5 text-primary-600" />
             </div>
             <h3 className="text-lg font-semibold text-gray-800">
-              Account Settings
+              Paramètres du compte
             </h3>
           </div>
 
@@ -407,13 +407,13 @@ export const ProfileScreen = () => {
             </button>
 
             <h3 className="text-xl font-semibold text-gray-800 mb-6">
-              Change Password
+              Modifier le mot de passe
             </h3>
 
             <form onSubmit={handlePasswordSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  New Password
+                  Nouveau mot de passe
                 </label>
                 <input
                   type="password"
@@ -427,7 +427,7 @@ export const ProfileScreen = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Confirm New Password
+                  Confirmer le nouveau mot de passe
                 </label>
                 <input
                   type="password"
