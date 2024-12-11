@@ -297,7 +297,7 @@ export const MediaUpload: React.FC<MediaUploadProps> = ({ onSubmit }) => {
       <textarea
         value={caption}
         onChange={(e) => setCaption(e.target.value)}
-        placeholder="Write a caption..."
+        placeholder="Ecrire un mot..."
         className="w-full p-3 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors resize-none"
         rows={3}
         required
