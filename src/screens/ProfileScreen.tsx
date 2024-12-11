@@ -300,7 +300,7 @@ export const ProfileScreen = () => {
             >
               <div className="flex items-center gap-3">
                 <Lock className="w-5 h-5 text-gray-500" />
-                <span className="font-medium text-gray-700">Change Password</span>
+                <span className="font-medium text-gray-700">Changer de mot de passe</span>
               </div>
               <ChevronRight className="w-5 h-5 text-gray-400" />
             </button>
@@ -311,7 +311,7 @@ export const ProfileScreen = () => {
             >
               <div className="flex items-center gap-3">
                 <LogOut className="w-5 h-5 text-red-500" />
-                <span className="font-medium text-red-600">Sign Out</span>
+                <span className="font-medium text-red-600">Se déconnecter</span>
               </div>
               <ChevronRight className="w-5 h-5 text-red-400" />
             </button>
