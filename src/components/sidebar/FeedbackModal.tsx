@@ -38,7 +38,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({ onClose }) => {
               console.log('Open feedback form');
             }}
           >
-            Open Feedback Form
+            Ouvrir le formulaire
           </button>
         </div>
       </div>
