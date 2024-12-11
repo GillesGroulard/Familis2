@@ -27,7 +27,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
           >
             <Users className="w-5 h-5" />
           </button>
-          <span className="text-xs text-gray-600 mt-1">Family</span>
+          <span className="text-xs text-gray-600 mt-1">Famille</span>
         </div>
       ) : (
         <div className="flex flex-col items-center">
