@@ -9,7 +9,7 @@ interface ElderlyReactionsProps {
 
 const EMOJI_LABELS = {
   'LOVE': '❤️',
-  'HAPPY': '😊',
+  'SMILE': '😊',
   'HUG': '🤗',
   'PROUD': '👏'
 } as const;
