@@ -21,21 +21,20 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({ onClose }) => {
             <MessageSquare className="w-6 h-6 text-primary-600" />
           </div>
           <h2 className="text-xl font-semibold text-gray-800">
-            Share Your Feedback
+            Partagez votre retour !
           </h2>
         </div>
 
         <div className="text-center">
           <p className="text-gray-600 mb-6">
-            We value your input! Help us improve your experience by sharing your thoughts.
+            Aidez nous en nous partageant vos retours !
           </p>
           {/* Placeholder for Google Forms integration */}
           <button
             className="w-full bg-primary-500 text-white py-3 px-4 rounded-lg font-medium 
               hover:bg-primary-600 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 
               transition-colors"
-            onClick={() => {
-              // TODO: Add Google Forms link
+            onClick={() => {https://docs.google.com/forms/d/1TaSu8Ps3KgSoenLEoTKd65u-AbixdBaY9ly2hy0eFPE/edit
               console.log('Open feedback form');
             }}
           >
