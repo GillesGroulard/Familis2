@@ -120,7 +120,7 @@ export const FamilySidebar: React.FC<FamilySidebarProps> = ({
                       >
                         <Users className="w-5 h-5" />
                       </button>
-                      <span className="text-xs text-gray-600 mt-1">Family</span>
+                      <span className="text-xs text-gray-600 mt-1">Famille</span>
                     </div>
                     
                     <div className="flex flex-col items-center">
@@ -133,7 +133,7 @@ export const FamilySidebar: React.FC<FamilySidebarProps> = ({
                       >
                         <PlaySquare className="w-5 h-5" />
                       </button>
-                      <span className="text-xs text-gray-600 mt-1">Slideshow</span>
+                      <span className="text-xs text-gray-600 mt-1">Diaporama</span>
                     </div>
 
                     {/* Small spacer after quick actions */}
