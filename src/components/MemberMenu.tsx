@@ -31,7 +31,7 @@ export const MemberMenu: React.FC<MemberMenuProps> = ({ onRemove }) => {
               className="w-full flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 transition-colors text-sm"
             >
               <UserMinus className="w-4 h-4" />
-              Remove from Family
+              Supprimer de la famille ?
             </button>
           </div>
         )}
@@ -50,14 +50,14 @@ export const MemberMenu: React.FC<MemberMenuProps> = ({ onRemove }) => {
               </button>
             </div>
             <p className="text-gray-600 mb-6">
-              Are you sure you want to remove this member from the family? This action cannot be undone.
+              Etes-vous sûr ?
             </p>
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowConfirm(false)}
                 className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
               >
-                Cancel
+                Annuler
               </button>
               <button
                 onClick={() => {
@@ -66,7 +66,7 @@ export const MemberMenu: React.FC<MemberMenuProps> = ({ onRemove }) => {
                 }}
                 className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
               >
-                Remove
+                Supprimer
               </button>
             </div>
           </div>
