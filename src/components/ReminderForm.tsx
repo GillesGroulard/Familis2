@@ -67,20 +67,20 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ familyId, onSuccess,
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Title (optional)
+            Titre (optional)
           </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="w-full p-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            placeholder="Enter reminder title"
+            placeholder="Entrer un titre"
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Show Reminder To
+            Rappel est pour ?
           </label>
           <div className="flex gap-4">
             <label className="flex items-center">
@@ -91,7 +91,7 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ familyId, onSuccess,
                 onChange={(e) => setTargetAudience(e.target.value as 'FAMILY')}
                 className="mr-2"
               />
-              Family Only
+              Famille
             </label>
             <label className="flex items-center">
               <input
@@ -101,7 +101,7 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ familyId, onSuccess,
                 onChange={(e) => setTargetAudience(e.target.value as 'ELDER')}
                 className="mr-2"
               />
-              Elder & Family
+              L'ainé et la famille
             </label>
           </div>
         </div>
@@ -126,7 +126,7 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ familyId, onSuccess,
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Time (optional)
+              Horaire (optional)
             </label>
             <div className="relative">
               <input
@@ -146,7 +146,7 @@ export const ReminderForm: React.FC<ReminderFormProps> = ({ familyId, onSuccess,
             onClick={onCancel}
             className="flex-1 py-3 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
           >
-            Cancel
+            Annuler
           </button>
           <button
             type="submit"
