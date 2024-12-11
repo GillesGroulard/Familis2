@@ -258,14 +258,14 @@ export const JoinScreen: React.FC<JoinScreenProps> = ({ onSuccess }) => {
                 className="w-full flex items-center justify-center gap-3 p-4 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
               >
                 <Users className="w-5 h-5" />
-                <span className="font-medium">Create a New Family</span>
+                <span className="font-medium">Créer une nouvelle famille</span>
               </button>
               <button
                 onClick={() => setMode('join')}
                 className="w-full flex items-center justify-center gap-3 p-4 bg-white text-primary-500 border-2 border-primary-500 rounded-lg hover:bg-primary-50 transition-colors"
               >
                 <UserPlus className="w-5 h-5" />
-                <span className="font-medium">Join Existing Family</span>
+                <span className="font-medium">Rejoindre une famille existante</span>
               </button>
             </div>
           ) : mode === 'create' ? (
