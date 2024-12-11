@@ -61,7 +61,7 @@ export const PhotosScreen = () => {
       {/* Active Section Content */}
       {activeSection === 'photos' ? (
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h2 className="text-xl font-semibold text-gray-800 mb-6">Share a Moment</h2>
+          <h2 className="text-xl font-semibold text-gray-800 mb-6">Partager un moment</h2>
           {error && (
             <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg">
               {error}
