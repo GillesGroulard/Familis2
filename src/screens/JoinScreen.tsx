@@ -170,7 +170,7 @@ export const JoinScreen: React.FC<JoinScreenProps> = ({ onSuccess }) => {
           {families.length > 0 && (
             <div className="mb-8 space-y-4">
               <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                Your Families
+                Vos familles
               </h3>
               {families.map(family => (
                 <div key={family.id} className="bg-gray-50 rounded-lg p-4">
@@ -271,12 +271,12 @@ export const JoinScreen: React.FC<JoinScreenProps> = ({ onSuccess }) => {
           ) : mode === 'create' ? (
             <div>
               <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                Create a New Family
+                Créer une nouvelle famille
               </h3>
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Family Name
+                    Nom de famille
                   </label>
                   <input
                     type="text"
@@ -288,7 +288,7 @@ export const JoinScreen: React.FC<JoinScreenProps> = ({ onSuccess }) => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Display Name (optional)
+                    Nom affiché (facultatif)
                   </label>
                   <input
                     type="text"
@@ -314,13 +314,13 @@ export const JoinScreen: React.FC<JoinScreenProps> = ({ onSuccess }) => {
                     onClick={() => setMode(null)}
                     className="flex-1 py-3 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                   >
-                    Cancel
+                    Annuler
                   </button>
                   <button
                     onClick={() => {/* Handle create family */}}
                     className="flex-1 py-3 px-4 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
                   >
-                    Create Family
+                    Créer une famille
                   </button>
                 </div>
               </div>
@@ -328,12 +328,12 @@ export const JoinScreen: React.FC<JoinScreenProps> = ({ onSuccess }) => {
           ) : (
             <div>
               <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                Join a Family
+                Rejoindre une famille
               </h3>
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Family Join Code
+                    Code de la famille
                   </label>
                   <input
                     type="text"
@@ -348,13 +348,13 @@ export const JoinScreen: React.FC<JoinScreenProps> = ({ onSuccess }) => {
                     onClick={() => setMode(null)}
                     className="flex-1 py-3 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                   >
-                    Cancel
+                    Annuler
                   </button>
                   <button
                     onClick={() => {/* Handle join family */}}
                     className="flex-1 py-3 px-4 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
                   >
-                    Join Family
+                    Rejoindre la famille
                   </button>
                 </div>
               </div>
