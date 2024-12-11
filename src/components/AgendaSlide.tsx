@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock } from 'lucide-react';
 import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';  // Importation de la locale française
 import type { Reminder } from '../types';
 
 interface AgendaSlideProps {
@@ -39,14 +40,14 @@ export const AgendaSlide: React.FC<AgendaSlideProps> = ({ reminders }) => {
       <div className="text-center mb-8 md:mb-12 animate-fade-in">
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-blue-100 max-w-2xl mx-auto">
           <h1 className="text-5xl md:text-6xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
-            {format(now, 'EEEE')}
+            {format(now, 'EEEE', { locale: fr })}  {/* Locale française pour le jour */}
           </h1>
           <h2 className="text-3xl md:text-4xl text-blue-800 mb-4">
-            {format(now, 'MMMM d, yyyy')}
+            {format(now, 'MMMM d, yyyy', { locale: fr })}  {/* Locale française pour le mois et la date */}
           </h2>
           <div className="flex items-center justify-center gap-3 text-2xl md:text-3xl text-blue-600">
             <Clock className="w-6 h-6 md:w-8 md:h-8" />
-            <span>{format(now, 'h:mm a')}</span>
+            <span>{format(now, 'h:mm a', { locale: fr })}</span>  {/* Locale française pour l'heure */}
           </div>
         </div>
       </div>
@@ -74,11 +75,11 @@ export const AgendaSlide: React.FC<AgendaSlideProps> = ({ reminders }) => {
                   >
                     <div className="flex flex-col md:flex-row md:items-center justify-between mb-2 md:mb-3">
                       <span className="text-xl md:text-2xl font-medium text-blue-800">
-                        {format(new Date(reminder.date), 'EEEE, MMMM d')}
+                        {format(new Date(reminder.date), 'EEEE, MMMM d', { locale: fr })} {/* Locale française pour la date */}
                       </span>
                       {reminder.time && (
                         <span className="text-lg md:text-xl text-blue-600 font-medium">
-                          {format(new Date(`2000-01-01T${reminder.time}`), 'h:mm a')}
+                          {format(new Date(`2000-01-01T${reminder.time}`), 'h:mm a', { locale: fr })}  {/* Locale française pour l'heure */}
                         </span>
                       )}
                     </div>
@@ -111,3 +112,4 @@ export const AgendaSlide: React.FC<AgendaSlideProps> = ({ reminders }) => {
     </div>
   );
 };
+
