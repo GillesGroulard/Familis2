@@ -70,8 +70,8 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab, f
         />
         <NavItem
           icon={<UserCircle className="w-6 h-6" />}
-          label="Profile"
-          active={activeTab === 'profil'}
+          label="Profil"
+          active={activeTab === 'profile'}
           onClick={() => setActiveTab('profile')}
         />
         <NavItem
