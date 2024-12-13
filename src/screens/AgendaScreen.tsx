@@ -334,7 +334,4 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
     onClose={() => setSuccess(null)}
   />
 )}
-</div>
-
-
-
+</div> {/* <-- Closing div tag here to fix the error */}
