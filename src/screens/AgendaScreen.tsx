@@ -326,11 +326,4 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
   </div>
 </div>
 
-{success && (
-  <Toast
-    message={success}
-    type="success"
-    onClose={() => setSuccess(null)}
-  />
-)}
 
