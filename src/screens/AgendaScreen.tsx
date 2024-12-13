@@ -7,6 +7,8 @@ import { Toast } from '../components/Toast';
 import { useNavigation } from '../hooks/useNavigation';
 import { supabase } from '../lib/supabase';
 import type { Reminder } from '../types';
+import { fr } from 'date-fns/locale';  // Ligne 1
+
 
 interface AgendaScreenProps {
   familyId: string | null;
@@ -172,7 +174,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                       <div className="flex items-center gap-2 text-primary-600 mb-2">
                         <CalendarIcon className="w-5 h-5" />
                         <span className="font-medium">
-                          {format(parseISO(reminder.date), 'MMM d, yyyy')}
+                          {format(parseISO(reminder.date), 'MMM d, yyyy', { locale: fr })}
                         </span>
                       </div>
                       {reminder.time && (
@@ -248,7 +250,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
               </div>
 
               <div className="grid grid-cols-7 gap-px bg-gray-200 rounded-lg overflow-hidden relative">
-                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+                {['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'].map((day) => (
                   <div
                     key={day}
                     className="bg-gray-50 text-center py-3 text-sm font-medium text-gray-500"
@@ -285,7 +287,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                             ? 'text-gray-900'
                             : 'text-gray-400'
                       }`}>
-                        {format(day, 'd')}
+                        {format(day, 'd', { locale: fr })}
                       </div>
                       <div className="space-y-1.5">
                         {dayReminders.map((reminder) => (
