@@ -185,7 +185,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                               className="w-8 h-8 rounded-full object-cover"
                             />
                             <span className="text-sm text-gray-600">
-                              {reminder.assigned_to.name} will do it
+                              {reminder.assigned_to.name} S'en occupe
                             </span>
                           </div>
                           <button
