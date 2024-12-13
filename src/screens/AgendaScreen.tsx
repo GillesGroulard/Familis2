@@ -335,3 +335,4 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
   />
 )}
 </div> {/* <-- Closing div tag here to fix the error */}
+</div> {/* <-- Fermeture de la balise div ici */}
