@@ -181,7 +181,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                         <div className="flex items-center gap-2 text-gray-600 mb-3">
                           <Clock className="w-4 h-4" />
                           <span>
-                            {format(parseISO(`2000-01-01T${reminder.time}`), 'h:mm a', { locale: fr })}
+                            {format(parseISO(`2000-01-01T${reminder.time}`), 'HH:mm', { locale: fr })}
                           </span>
                         </div>
                       )}
@@ -301,7 +301,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                           >
                             {reminder.time && (
                               <div className="text-xs text-primary-700 font-medium mb-1">
-                                {format(parseISO(`2000-01-01T${reminder.time}`), 'h:mm a', { locale: fr })}
+                                {format(parseISO(`2000-01-01T${reminder.time}`), 'HH:mm', { locale: fr })}
                               </div>
                             )}
                             <div className={`text-sm text-primary-800 ${
