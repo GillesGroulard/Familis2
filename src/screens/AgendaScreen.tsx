@@ -334,6 +334,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
     onClose={() => setSuccess(null)}
   />
 )}
-</div> {/* <-- Fermeture de la div ici */}
-</> {/* <-- Fermeture du fragment ici */}
+</div> {/* <-- Fermeture de la div */}
+</> {/* <-- Fermeture du fragment */}
+
 
