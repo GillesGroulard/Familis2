@@ -236,7 +236,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
       </div>
     </div>
 
-    <div className="grid grid-cols-7 gap-px bg-gray-200 rounded-lg overflow-hidden relative">
+    <div className="grid grid-cols-7 gap-px bg-gray-200 rounded-lg overflow-hidden">
       {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
         <div
           key={day}
@@ -255,75 +255,86 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
           <div
             key={idx}
             onClick={() => setSelectedDay(isSelected ? null : day)}
-            className={`p-3 cursor-pointer transition-all duration-300 ${
-              isSelected
-                ? 'col-span-7 bg-white shadow-lg transform scale-105 p-6'
-                : isCurrentMonth
-                ? isToday
-                  ? 'bg-blue-50 ring-1 ring-blue-200'
-                  : 'bg-white hover:bg-gray-50'
+            className={`min-h-[140px] p-3 cursor-pointer transition-all duration-200 ${
+              isCurrentMonth
+                ? isSelected
+                  ? 'bg-primary-50 ring-2 ring-primary-500 scale-105'
+                  : isToday
+                    ? 'bg-blue-50 ring-1 ring-blue-200'
+                    : 'bg-white hover:bg-gray-50'
                 : 'bg-gray-50'
             }`}
+            style={{
+              transform: isSelected ? 'scale(1.1)' : 'scale(1)',
+              transition: 'transform 0.2s ease-in-out',
+            }}
           >
-            {isSelected ? (
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                  Rappels pour le {format(day, 'EEEE, MMMM d')}
-                </h3>
-                <ul className="space-y-3">
-                  {dayReminders.length ? (
-                    dayReminders.map((reminder) => (
-                      <li key={reminder.id} className="p-4 bg-primary-50 rounded-lg shadow">
-                        <p className="text-sm text-primary-800 font-medium">
-                          {reminder.description}
-                        </p>
-                        {reminder.time && (
-                          <p className="text-xs text-gray-600 mt-1">
-                            Heure: {format(parseISO(`2000-01-01T${reminder.time}`), 'h:mm a')}
-                          </p>
-                        )}
-                        {reminder.assigned_to && (
-                          <p className="text-xs text-gray-600 mt-1">
-                            Assigné à: {reminder.assigned_to.name}
-                          </p>
-                        )}
-                      </li>
-                    ))
-                  ) : (
-                    <p className="text-sm text-gray-500">Aucun rappel pour ce jour.</p>
-                  )}
-                </ul>
-              </div>
-            ) : (
-              <>
+            <div
+              className={`text-sm font-medium mb-2 ${
+                isToday
+                  ? 'text-blue-600'
+                  : isCurrentMonth
+                    ? 'text-gray-900'
+                    : 'text-gray-400'
+              }`}
+            >
+              {format(day, 'd')}
+            </div>
+            <div className="space-y-1.5">
+              {dayReminders.map((reminder) => (
                 <div
-                  className={`text-sm font-medium mb-2 ${
-                    isToday
-                      ? 'text-blue-600'
-                      : isCurrentMonth
-                      ? 'text-gray-900'
-                      : 'text-gray-400'
+                  key={reminder.id}
+                  className={`p-2 rounded-lg transition-all duration-200 ${
+                    isSelected
+                      ? 'bg-white shadow-md scale-105'
+                      : 'bg-primary-50 border border-primary-100 hover:bg-primary-100'
                   }`}
                 >
-                  {format(day, 'd')}
-                </div>
-                <div className="space-y-1.5">
-                  {dayReminders.slice(0, 2).map((reminder) => (
-                    <div
-                      key={reminder.id}
-                      className="p-2 rounded-lg bg-primary-50 border border-primary-100 text-primary-800 text-xs line-clamp-1"
-                    >
-                      {reminder.description}
+                  {reminder.time && (
+                    <div className="text-xs text-primary-700 font-medium mb-1">
+                      {format(parseISO(`2000-01-01T${reminder.time}`), 'h:mm a')}
                     </div>
-                  ))}
+                  )}
+                  <div
+                    className={`text-sm text-primary-800 ${
+                      isSelected ? 'line-clamp-none' : 'line-clamp-2'
+                    }`}
+                  >
+                    {reminder.description}
+                  </div>
+                  {reminder.assigned_to && (
+                    <div className="flex items-center gap-2 mt-2">
+                      <img
+                        src={
+                          reminder.assigned_to.avatar_url ||
+                          'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100'
+                        }
+                        alt={reminder.assigned_to.name}
+                        className="w-6 h-6 rounded-full object-cover"
+                      />
+                      <span className="text-xs text-primary-600 font-medium">
+                        {reminder.assigned_to.name}
+                      </span>
+                    </div>
+                  )}
                 </div>
-              </>
-            )}
+              ))}
+            </div>
           </div>
         );
       })}
     </div>
   </div>
 </div>
+
+{success && (
+  <Toast
+    message={success}
+    type="success"
+    onClose={() => setSuccess(null)}
+  />
+)}
+</div>
+
 
 
