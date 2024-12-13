@@ -19,6 +19,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
   const { getActiveReminders, acknowledgeReminder, assignReminder, deleteReminder } = useReminders(familyId || '');
   const [reminders, setReminders] = useState<Reminder[]>([]);
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+  const [expandedDay, setExpandedDay] = useState<Date | null>(null);
   const { navigateToPhotos } = useNavigation();
 
   useEffect(() => {
@@ -39,11 +40,13 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
   const handlePrevMonth = () => {
     setCurrentDate(subMonths(currentDate, 1));
     setSelectedDay(null);
+    setExpandedDay(null);
   };
 
   const handleNextMonth = () => {
     setCurrentDate(addMonths(currentDate, 1));
     setSelectedDay(null);
+    setExpandedDay(null);
   };
 
   const handleFamilyChange = (id: string) => {
@@ -61,7 +64,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
 
       await assignReminder(reminderId, user.id);
       await fetchReminders();
-      setSuccess("Vous avez pris en charge ce rappel !");
+      setSuccess("You've taken charge of this reminder!");
     } catch (err) {
       console.error('Error assigning reminder:', err);
     }
@@ -71,7 +74,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
     try {
       await deleteReminder(reminderId);
       await fetchReminders();
-      setSuccess('Le rappel a été supprimé');
+      setSuccess('Reminder has been removed');
     } catch (err) {
       console.error('Error deleting reminder:', err);
     }
@@ -92,6 +95,14 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
     });
   };
 
+  const handleDayClick = (day: Date) => {
+    if (expandedDay && isSameDay(expandedDay, day)) {
+      setExpandedDay(null);
+    } else {
+      setExpandedDay(day);
+    }
+  };
+
   if (!familyId) {
     return (
       <>
@@ -109,10 +120,10 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
               <CalendarIcon className="w-8 h-8 text-primary-600" />
             </div>
             <h2 className="text-xl font-semibold text-gray-800 mb-2">
-              Choisir une famille
+              Select a Family
             </h2>
             <p className="text-gray-600">
-              Choisissez une famille dans la barre latérale pour consulter son agenda.
+              Choose a family from the sidebar to view their agenda
             </p>
           </div>
         </div>
@@ -143,13 +154,13 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                   className="flex items-center justify-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
                 >
                   <Plus className="w-5 h-5" />
-                  <span>Ajouter un rappel</span>
+                  <span>Add Reminder</span>
                 </button>
               </div>
 
               {reminders.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
-                  Aucun rappel actif
+                  No active reminders
                 </div>
               ) : (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -185,7 +196,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                               className="w-8 h-8 rounded-full object-cover"
                             />
                             <span className="text-sm text-gray-600">
-                              {reminder.assigned_to.name} S'en occupe
+                              {reminder.assigned_to.name} will do it
                             </span>
                           </div>
                           <button
@@ -202,7 +213,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                           className="flex items-center justify-center gap-2 w-full py-2 px-4 bg-primary-100 text-primary-700 rounded-lg hover:bg-primary-200 transition-colors font-medium"
                         >
                           <Check className="w-4 h-4" />
-                          Je m'en occupe !
+                          I'll do it
                         </button>
                       )}
                     </div>
@@ -216,7 +227,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100">
             <div className="p-6">
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-semibold text-gray-800">Calendrier</h2>
+                <h2 className="text-2xl font-semibold text-gray-800">Calendar</h2>
                 <div className="flex items-center gap-4">
                   <button
                     onClick={handlePrevMonth}
@@ -236,7 +247,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-7 gap-px bg-gray-200 rounded-lg overflow-hidden">
+              <div className="grid grid-cols-7 gap-px bg-gray-200 rounded-lg overflow-hidden relative">
                 {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
                   <div
                     key={day}
@@ -249,16 +260,18 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                   const dayReminders = getRemindersByDate(day);
                   const isToday = isSameDay(day, new Date());
                   const isCurrentMonth = isSameMonth(day, currentDate);
-                  const isSelected = selectedDay && isSameDay(day, selectedDay);
-
+                  const isExpanded = expandedDay && isSameDay(day, expandedDay);
+                  
                   return (
                     <div
                       key={idx}
-                      onClick={() => setSelectedDay(isSelected ? null : day)}
-                      className={`min-h-[140px] p-3 cursor-pointer transition-all duration-200 ${
+                      onClick={() => handleDayClick(day)}
+                      className={`calendar-day min-h-[140px] p-3 cursor-pointer transition-all duration-300 ${
+                        isExpanded ? 'expanded' : ''
+                      } ${
                         isCurrentMonth
-                          ? isSelected
-                            ? 'bg-primary-50 ring-2 ring-primary-500'
+                          ? isExpanded
+                            ? 'bg-white'
                             : isToday
                               ? 'bg-blue-50 ring-1 ring-blue-200'
                               : 'bg-white hover:bg-gray-50'
@@ -279,8 +292,8 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                           <div
                             key={reminder.id}
                             className={`p-2 rounded-lg transition-all duration-200 ${
-                              isSelected
-                                ? 'bg-white shadow-md scale-105'
+                              isExpanded
+                                ? 'bg-white shadow-md'
                                 : 'bg-primary-50 border border-primary-100 hover:bg-primary-100'
                             }`}
                           >
@@ -290,7 +303,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                               </div>
                             )}
                             <div className={`text-sm text-primary-800 ${
-                              isSelected ? 'line-clamp-none' : 'line-clamp-2'
+                              isExpanded ? 'line-clamp-none' : 'line-clamp-2'
                             }`}>
                               {reminder.description}
                             </div>
@@ -317,6 +330,12 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
           </div>
         </div>
 
+        {/* Overlay for expanded day */}
+        <div 
+          className={`calendar-overlay ${expandedDay ? 'visible' : ''}`}
+          onClick={() => setExpandedDay(null)}
+        />
+
         {success && (
           <Toast
             message={success}
@@ -328,4 +347,3 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
     </>
   );
 };
-
