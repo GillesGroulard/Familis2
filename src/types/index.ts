@@ -60,6 +60,7 @@ export interface Reaction {
   };
 }
 
+// Add deleted flag to Reminder type
 export interface Reminder {
   id: string;
   family_id: string;
@@ -72,6 +73,7 @@ export interface Reminder {
   recurrence_day: number | null;
   is_acknowledged: boolean;
   created_at: string;
+  deleted?: boolean; // Add this field
   assigned_to?: {
     id: string;
     name: string;
