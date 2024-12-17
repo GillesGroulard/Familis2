@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Clock, Plus, Bell, Calendar, Loader2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Clock, Plus, Bell, Calendar, Loader2, CheckSquare, Users } from 'lucide-react';
 import { useReminders } from '../hooks/useReminders';
 import type { Family } from '../types';
+import { supabase } from '../lib/supabase';
 
 interface ReminderSectionProps {
   families: Family[];
@@ -9,34 +10,71 @@ interface ReminderSectionProps {
 }
 
 export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSuccess }) => {
-  const [selectedFamilyId, setSelectedFamilyId] = useState<string>('');
+  const [selectedFamilies, setSelectedFamilies] = useState<string[]>([]);
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [targetAudiences, setTargetAudiences] = useState<Set<'ELDER' | 'FAMILY'>>(new Set());
   const [recurrenceType, setRecurrenceType] = useState<'NONE' | 'DAILY' | 'WEEKLY' | 'MONTHLY'>('NONE');
   const [recurrenceDay, setRecurrenceDay] = useState<number | null>(null);
-  const { createReminder, loading, error } = useReminders(selectedFamilyId);
+  const [selectAllFamilies, setSelectAllFamilies] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { createReminder } = useReminders(selectedFamilies[0] || '');
+
+  const handleSelectAllFamilies = () => {
+    setSelectAllFamilies(!selectAllFamilies);
+    setSelectedFamilies(selectAllFamilies ? [] : families.map(f => f.id));
+  };
+
+  const handleFamilyToggle = (familyId: string) => {
+    setSelectedFamilies(prev => 
+      prev.includes(familyId)
+        ? prev.filter(id => id !== familyId)
+        : [...prev, familyId]
+    );
+  };
+
+  useEffect(() => {
+    setSelectAllFamilies(selectedFamilies.length === families.length);
+  }, [selectedFamilies, families]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedFamilyId || !description || !date || targetAudiences.size === 0) return;
+    if (selectedFamilies.length === 0 || !description || !date || targetAudiences.size === 0) return;
+
+    setLoading(true);
+    setError(null);
 
     try {
-      // Create a reminder for each selected audience
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
+      // Create a reminder for each selected family and audience
       const audiences = Array.from(targetAudiences);
-      await Promise.all(audiences.map(audience => 
-        createReminder({
-          description,
-          date,
-          time: time || null,
-          family_id: selectedFamilyId,
-          target_audience: audience,
-          recurrence_type: recurrenceType,
-          recurrence_day: recurrenceDay
-        })
-      ));
-      
+      const promises = selectedFamilies.flatMap(familyId => 
+        audiences.map(audience => 
+          supabase.from('reminders').insert([{
+            description,
+            date,
+            time: time || null,
+            family_id: familyId,
+            user_id: user.id,
+            target_audience: audience,
+            recurrence_type: recurrenceType,
+            recurrence_day: recurrenceDay,
+            is_acknowledged: false
+          }])
+        )
+      );
+
+      const results = await Promise.all(promises);
+      const errors = results.filter(result => result.error).map(result => result.error);
+
+      if (errors.length > 0) {
+        throw new Error(errors[0].message);
+      }
+
       // Reset form
       setDescription('');
       setDate('');
@@ -44,10 +82,14 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
       setTargetAudiences(new Set());
       setRecurrenceType('NONE');
       setRecurrenceDay(null);
+      setSelectedFamilies([]);
       
       onSuccess?.();
     } catch (err) {
       console.error('Error creating reminder:', err);
+      setError(err instanceof Error ? err.message : 'Failed to create reminder');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,7 +111,7 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
         <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
           <Clock className="w-5 h-5 text-primary-600" />
         </div>
-        <h3 className="text-lg font-semibold text-gray-800">Ajouter un rappel</h3>
+        <h3 className="text-lg font-semibold text-gray-800">Add Reminder</h3>
       </div>
 
       {error && (
@@ -80,22 +122,48 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Sélectionner une famille
-          </label>
-          <select
-            value={selectedFamilyId}
-            onChange={(e) => setSelectedFamilyId(e.target.value)}
-            className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            required
-          >
-            <option value="">Sélectionner une famille</option>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Share with families
+            </label>
+            <button
+              type="button"
+              onClick={handleSelectAllFamilies}
+              className="flex items-center gap-2 px-3 py-1.5 text-sm text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+            >
+              <CheckSquare className="w-4 h-4" />
+              {selectAllFamilies ? 'Deselect All' : 'Select All'}
+            </button>
+          </div>
+          <div className="space-y-2">
             {families.map((family) => (
-              <option key={family.id} value={family.id}>
-                {family.display_name || family.name}
-              </option>
+              <label
+                key={family.id}
+                className="flex items-center p-3 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedFamilies.includes(family.id)}
+                  onChange={() => handleFamilyToggle(family.id)}
+                  className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                />
+                <div className="ml-3 flex items-center gap-3">
+                  {family.family_picture ? (
+                    <img
+                      src={family.family_picture}
+                      alt={family.name}
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+                      <Users className="w-4 h-4 text-primary-600" />
+                    </div>
+                  )}
+                  <span className="font-medium text-gray-700">{family.display_name || family.name}</span>
+                </div>
+              </label>
             ))}
-          </select>
+          </div>
         </div>
 
         <div>
@@ -108,7 +176,7 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
             className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             rows={3}
             required
-            placeholder="Entrer la description du rappel"
+            placeholder="Enter reminder description"
           />
         </div>
 
@@ -132,7 +200,7 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Horaire (optional)
+              Time (optional)
             </label>
             <div className="relative">
               <input
@@ -148,7 +216,7 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Le rappel est pour 
+            Show Reminder To
           </label>
           <div className="grid grid-cols-2 gap-4">
             <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
@@ -158,7 +226,7 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
                 onChange={() => handleAudienceToggle('ELDER')}
                 className="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500"
               />
-              <span className="ml-2 text-sm text-gray-700">L'ainé (Diaporama)</span>
+              <span className="ml-2 text-sm text-gray-700">Elder (Slideshow)</span>
             </label>
             <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
               <input
@@ -167,14 +235,14 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
                 onChange={() => handleAudienceToggle('FAMILY')}
                 className="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500"
               />
-              <span className="ml-2 text-sm text-gray-700">La famille (Agenda)</span>
+              <span className="ml-2 text-sm text-gray-700">Family (Feed)</span>
             </label>
           </div>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Récurrence
+            Recurrence
           </label>
           <select
             value={recurrenceType}
@@ -184,10 +252,10 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
             }}
             className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           >
-            <option value="NONE">Un rappel unique</option>
-            <option value="DAILY">Journalier</option>
-            <option value="WEEKLY">Hebdomadaire</option>
-            <option value="MONTHLY">Mensuel</option>
+            <option value="NONE">One-time reminder</option>
+            <option value="DAILY">Daily</option>
+            <option value="WEEKLY">Weekly</option>
+            <option value="MONTHLY">Monthly</option>
           </select>
 
           {recurrenceType === 'MONTHLY' && (
@@ -214,7 +282,7 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
 
         <button
           type="submit"
-          disabled={loading || !selectedFamilyId || !description || !date || targetAudiences.size === 0}
+          disabled={loading || selectedFamilies.length === 0 || !description || !date || targetAudiences.size === 0}
           className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-primary-500 text-white rounded-lg font-medium hover:bg-primary-600 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? (
@@ -225,7 +293,7 @@ export const ReminderSection: React.FC<ReminderSectionProps> = ({ families, onSu
           ) : (
             <>
               <Plus className="w-5 h-5" />
-              Ajouter le rappel
+              Add Reminder
             </>
           )}
         </button>
