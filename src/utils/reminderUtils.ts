@@ -1,18 +1,50 @@
-import { Reminder } from '../types';
+import { 
+  isSameMonth, 
+  parseISO, 
+  getDay,
+  getDate,
+  isSameDay
+} from 'date-fns';
+import type { Reminder } from '../types';
 
-export const redirectToAddReminder = () => {
-  window.location.hash = 'photos';
-  // Add a small delay to ensure the page loads before focusing the reminders section
-  setTimeout(() => {
-    const remindersSection = document.getElementById('reminders-section');
-    if (remindersSection) {
-      remindersSection.scrollIntoView({ behavior: 'smooth' });
-      const reminderInput = document.querySelector('[name="reminder-description"]') as HTMLElement;
-      if (reminderInput) {
-        reminderInput.focus();
-      }
+export const getRemindersForDate = (
+  reminders: Reminder[],
+  date: Date,
+  currentMonth: Date
+): Reminder[] => {
+  // Filter out any undefined or null reminders
+  const validReminders = reminders.filter(r => r && r.date);
+
+  return validReminders.filter(reminder => {
+    const reminderDate = parseISO(reminder.date);
+
+    // Handle different recurrence types
+    switch (reminder.recurrence_type) {
+      case 'DAILY':
+        // Show daily reminders if they start on or before this date
+        // and are within the current month
+        return reminderDate <= date && 
+               isSameMonth(date, currentMonth);
+
+      case 'WEEKLY':
+        // Show weekly reminders on the same day of week if they start on or before this date
+        // and are within the current month
+        return reminderDate <= date && 
+               getDay(reminderDate) === getDay(date) &&
+               isSameMonth(date, currentMonth);
+
+      case 'MONTHLY':
+        // Show monthly reminders on the same day of month if they start on or before this date
+        return reminder.recurrence_day === getDate(date) &&
+               reminderDate <= date &&
+               isSameMonth(date, currentMonth);
+
+      case 'NONE':
+      default:
+        // Show one-time reminders only on their specific date
+        return isSameDay(reminderDate, date);
     }
-  }, 100);
+  });
 };
 
 export const filterRemindersByAudience = (
@@ -22,21 +54,21 @@ export const filterRemindersByAudience = (
   return reminders.filter(reminder => reminder.target_audience === audience);
 };
 
-export const sortRemindersByDate = (reminders: Reminder[]): Reminder[] => {
-  return [...reminders].sort((a, b) => 
-    new Date(a.date).getTime() - new Date(b.date).getTime()
-  );
+export const sortRemindersByTime = (reminders: Reminder[]): Reminder[] => {
+  return [...reminders].sort((a, b) => {
+    if (!a.time && !b.time) return 0;
+    if (!a.time) return 1;
+    if (!b.time) return -1;
+    return a.time.localeCompare(b.time);
+  });
 };
 
-export const getWeeklyReminders = (reminders: Reminder[]): Reminder[] => {
-  const now = new Date();
-  const weekStart = new Date(now);
-  weekStart.setDate(now.getDate() - now.getDay());
-  const weekEnd = new Date(weekStart);
-  weekEnd.setDate(weekStart.getDate() + 6);
-
+export const removeDuplicateReminders = (reminders: Reminder[]): Reminder[] => {
+  const seen = new Set();
   return reminders.filter(reminder => {
-    const reminderDate = new Date(reminder.date);
-    return reminderDate >= weekStart && reminderDate <= weekEnd;
+    const key = `${reminder.description}-${reminder.date}-${reminder.time || ''}-${reminder.recurrence_type}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
   });
 };
