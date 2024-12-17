@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Check, Clock, Plus, X, Trash2 } from 'lucide-react';
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, parseISO } from 'date-fns';
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus } from 'lucide-react';
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths } from 'date-fns';
 import { useReminders } from '../hooks/useReminders';
 import { SharedSidebar } from '../components/SharedSidebar';
 import { Toast } from '../components/Toast';
 import { useNavigation } from '../hooks/useNavigation';
 import { supabase } from '../lib/supabase';
-import type { Reminder } from '../types';
+import { getRemindersForDate } from '../utils/reminderUtils';
+import { ReminderList } from '../components/reminders/ReminderList';
+import { CalendarDay } from '../components/reminders/CalendarDay';
 import { fr } from 'date-fns/locale';  // Ligne 1
-
 
 interface AgendaScreenProps {
   familyId: string | null;
@@ -18,38 +19,15 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
-  const { getActiveReminders, acknowledgeReminder, assignReminder, deleteReminder } = useReminders(familyId || '');
-  const [reminders, setReminders] = useState<Reminder[]>([]);
-  const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [expandedDay, setExpandedDay] = useState<Date | null>(null);
+  const { reminders, loading, error, getActiveReminders, acknowledgeReminder, assignReminder, deleteReminder, deleteRecurringReminders } = useReminders(familyId || '');
   const { navigateToPhotos } = useNavigation();
 
   useEffect(() => {
     if (familyId) {
-      fetchReminders();
+      getActiveReminders();
     }
-  }, [familyId]);
-
-  const fetchReminders = async () => {
-    try {
-      const activeReminders = await getActiveReminders();
-      setReminders(activeReminders || []);
-    } catch (err) {
-      console.error('Error fetching reminders:', err);
-    }
-  };
-
-  const handlePrevMonth = () => {
-    setCurrentDate(subMonths(currentDate, 1));
-    setSelectedDay(null);
-    setExpandedDay(null);
-  };
-
-  const handleNextMonth = () => {
-    setCurrentDate(addMonths(currentDate, 1));
-    setSelectedDay(null);
-    setExpandedDay(null);
-  };
+  }, [familyId, getActiveReminders]);
 
   const handleFamilyChange = (id: string) => {
     window.location.hash = `family/${id}`;
@@ -59,13 +37,30 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
     window.location.hash = 'join';
   };
 
+  const handlePrevMonth = () => {
+    setCurrentDate(subMonths(currentDate, 1));
+    setExpandedDay(null);
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate(addMonths(currentDate, 1));
+    setExpandedDay(null);
+  };
+
+  const handleDayClick = (day: Date) => {
+    if (expandedDay && isSameDay(expandedDay, day)) {
+      setExpandedDay(null);
+    } else {
+      setExpandedDay(day);
+    }
+  };
+
   const handleTakeCharge = async (reminderId: string) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
       await assignReminder(reminderId, user.id);
-      await fetchReminders();
       setSuccess("You've taken charge of this reminder!");
     } catch (err) {
       console.error('Error assigning reminder:', err);
@@ -75,34 +70,23 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
   const handleDeleteReminder = async (reminderId: string) => {
     try {
       await deleteReminder(reminderId);
-      await fetchReminders();
       setSuccess('Reminder has been removed');
     } catch (err) {
       console.error('Error deleting reminder:', err);
     }
   };
 
+  const handleDeleteRecurring = async (reminder: Reminder) => {
+    try {
+      await deleteRecurringReminders(reminder);
+      setSuccess('All occurrences of the recurring reminder have been removed');
+    } catch (err) {
+      console.error('Error deleting recurring reminder:', err);
+    }
+  };
+
   const handleAddReminder = () => {
     navigateToPhotos();
-  };
-
-  const monthStart = startOfMonth(currentDate);
-  const monthEnd = endOfMonth(currentDate);
-  const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
-
-  const getRemindersByDate = (date: Date) => {
-    return reminders.filter(reminder => {
-      const reminderDate = parseISO(reminder.date);
-      return isSameDay(reminderDate, date);
-    });
-  };
-
-  const handleDayClick = (day: Date) => {
-    if (expandedDay && isSameDay(expandedDay, day)) {
-      setExpandedDay(null);
-    } else {
-      setExpandedDay(day);
-    }
   };
 
   if (!familyId) {
@@ -133,6 +117,8 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
     );
   }
 
+  const familyReminders = reminders.filter(r => r.target_audience === 'FAMILY' && !r.deleted);
+
   return (
     <>
       <SharedSidebar
@@ -145,7 +131,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
       />
       
       <div className={`min-h-screen bg-gray-50 transition-all duration-300 ${!isCollapsed ? 'pl-24' : ''}`}>
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 pb-32">
           {/* Family Reminders Section */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 mb-8">
             <div className="p-6">
@@ -160,68 +146,12 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                 </button>
               </div>
 
-              {reminders.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  No active reminders
-                </div>
-              ) : (
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {reminders.map((reminder) => (
-                    <div
-                      key={reminder.id}
-                      className="flex flex-col p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors border border-gray-200"
-                    >
-                      <div className="flex items-center gap-2 text-primary-600 mb-2">
-                        <CalendarIcon className="w-5 h-5" />
-                        <span className="font-medium">
-                          {format(parseISO(reminder.date), 'MMM d, yyyy', { locale: fr })}
-                        </span>
-                      </div>
-                      {reminder.time && (
-                        <div className="flex items-center gap-2 text-gray-600 mb-3">
-                          <Clock className="w-4 h-4" />
-                          <span>
-                            {format(parseISO(`2000-01-01T${reminder.time}`), 'HH:mm', { locale: fr })}
-                          </span>
-                        </div>
-                      )}
-                      <p className="text-gray-700 flex-grow mb-4">
-                        {reminder.description}
-                      </p>
-                      
-                      {reminder.assigned_to ? (
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <img
-                              src={reminder.assigned_to.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100'}
-                              alt={reminder.assigned_to.name}
-                              className="w-8 h-8 rounded-full object-cover"
-                            />
-                            <span className="text-sm text-gray-600">
-                              {reminder.assigned_to.name} s'en occupe
-                            </span>
-                          </div>
-                          <button
-                            onClick={() => handleDeleteReminder(reminder.id)}
-                            className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Remove reminder"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      ) : (
-                        <button
-                          onClick={() => handleTakeCharge(reminder.id)}
-                          className="flex items-center justify-center gap-2 w-full py-2 px-4 bg-primary-100 text-primary-700 rounded-lg hover:bg-primary-200 transition-colors font-medium"
-                        >
-                          <Check className="w-4 h-4" />
-                          I'll do it
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
+              <ReminderList
+                reminders={familyReminders}
+                onDelete={handleDeleteReminder}
+                onDeleteRecurring={handleDeleteRecurring}
+                onTakeCharge={handleTakeCharge}
+              />
             </div>
           </div>
 
@@ -238,7 +168,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                     <ChevronLeft className="w-5 h-5 text-gray-600" />
                   </button>
                   <span className="text-lg font-medium text-gray-700 min-w-[140px] text-center">
-                    {format(currentDate, 'MMMM yyyy', { locale: fr })}
+                    {format(currentDate, 'MMMM yyyy')}
                   </span>
                   <button
                     onClick={handleNextMonth}
@@ -250,7 +180,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
               </div>
 
               <div className="grid grid-cols-7 gap-px bg-gray-200 rounded-lg overflow-hidden relative">
-                {['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'].map((day) => (
+                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
                   <div
                     key={day}
                     className="bg-gray-50 text-center py-3 text-sm font-medium text-gray-500"
@@ -258,75 +188,17 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                     {day}
                   </div>
                 ))}
-                {days.map((day, idx) => {
-                  const dayReminders = getRemindersByDate(day);
-                  const isToday = isSameDay(day, new Date());
-                  const isCurrentMonth = isSameMonth(day, currentDate);
-                  const isExpanded = expandedDay && isSameDay(day, expandedDay);
-                  
-                  return (
-                    <div
-                      key={idx}
-                      onClick={() => handleDayClick(day)}
-                      className={`calendar-day min-h-[140px] p-3 cursor-pointer transition-all duration-300 ${
-                        isExpanded ? 'expanded' : ''
-                      } ${
-                        isCurrentMonth
-                          ? isExpanded
-                            ? 'bg-white'
-                            : isToday
-                              ? 'bg-blue-50 ring-1 ring-blue-200'
-                              : 'bg-white hover:bg-gray-50'
-                          : 'bg-gray-50'
-                      }`}
-                    >
-                      <div className={`text-sm font-medium mb-2 ${
-                        isToday
-                          ? 'text-blue-600'
-                          : isCurrentMonth
-                            ? 'text-gray-900'
-                            : 'text-gray-400'
-                      }`}>
-                        {format(day, 'd', { locale: fr })}
-                      </div>
-                      <div className="space-y-1.5">
-                        {dayReminders.map((reminder) => (
-                          <div
-                            key={reminder.id}
-                            className={`p-2 rounded-lg transition-all duration-200 ${
-                              isExpanded
-                                ? 'bg-white shadow-md'
-                                : 'bg-primary-50 border border-primary-100 hover:bg-primary-100'
-                            }`}
-                          >
-                            {reminder.time && (
-                              <div className="text-xs text-primary-700 font-medium mb-1">
-                                {format(parseISO(`2000-01-01T${reminder.time}`), 'HH:mm', { locale: fr })}
-                              </div>
-                            )}
-                            <div className={`text-sm text-primary-800 ${
-                              isExpanded ? 'line-clamp-none' : 'line-clamp-2'
-                            }`}>
-                              {reminder.description}
-                            </div>
-                            {reminder.assigned_to && (
-                              <div className="flex items-center gap-2 mt-2">
-                                <img
-                                  src={reminder.assigned_to.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100'}
-                                  alt={reminder.assigned_to.name}
-                                  className="w-6 h-6 rounded-full object-cover"
-                                />
-                                <span className="text-xs text-primary-600 font-medium">
-                                  {reminder.assigned_to.name}
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
+                {eachDayOfInterval({ start: startOfMonth(currentDate), end: endOfMonth(currentDate) }).map((day, idx) => (
+                  <CalendarDay
+                    key={idx}
+                    day={day}
+                    reminders={getRemindersForDate(reminders, day, currentDate)}
+                    isCurrentMonth={isSameMonth(day, currentDate)}
+                    isToday={isSameDay(day, new Date())}
+                    isExpanded={expandedDay ? isSameDay(day, expandedDay) : false}
+                    onClick={() => handleDayClick(day)}
+                  />
+                ))}
               </div>
             </div>
           </div>
@@ -349,3 +221,5 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
     </>
   );
 };
+
+export default AgendaScreen;
