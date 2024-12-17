@@ -1,5 +1,5 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { ImagePlus, Video, X, Loader2, ZoomIn, ZoomOut, Check, MoveVertical } from 'lucide-react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { ImagePlus, Video, X, Loader2, ZoomIn, ZoomOut, Check, MoveVertical, CheckSquare } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useFamilies } from '../hooks/useFamilies';
 import Cropper from 'react-easy-crop';
@@ -27,6 +27,7 @@ export const MediaUpload: React.FC<MediaUploadProps> = ({ onSubmit }) => {
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [selectAllFamilies, setSelectAllFamilies] = useState(false);
   
   // Cropping state
   const [isCropping, setIsCropping] = useState(false);
@@ -34,6 +35,20 @@ export const MediaUpload: React.FC<MediaUploadProps> = ({ onSubmit }) => {
   const [zoom, setZoom] = useState(1);
   const [isVertical, setIsVertical] = useState(false);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<CropArea | null>(null);
+
+  // Handle select all families
+  const handleSelectAllFamilies = () => {
+    setSelectAllFamilies(!selectAllFamilies);
+    if (!selectAllFamilies) {
+      setSelectedFamilies(families.map(f => f.id));
+    } else {
+      setSelectedFamilies([]);
+    }
+  };
+
+  useEffect(() => {
+    setSelectAllFamilies(selectedFamilies.length === families.length);
+  }, [selectedFamilies, families]);
 
   const handleMediaChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -147,7 +162,6 @@ export const MediaUpload: React.FC<MediaUploadProps> = ({ onSubmit }) => {
         .from('media')
         .getPublicUrl(filePath);
 
-      // Add orientation metadata to URL
       const finalUrl = `${publicUrl}${isVertical ? '?orientation=vertical' : ''}`;
 
       await onSubmit({
@@ -284,7 +298,7 @@ export const MediaUpload: React.FC<MediaUploadProps> = ({ onSubmit }) => {
                 <Video className="w-8 h-8" />
               </div>
               <span className="text-sm font-medium">
-                Cliquer pour ajouter une photo/vidéo
+                Click to upload a photo or video
               </span>
               <span className="text-xs text-gray-400 mt-1">
                 Max size: 10MB
@@ -297,16 +311,26 @@ export const MediaUpload: React.FC<MediaUploadProps> = ({ onSubmit }) => {
       <textarea
         value={caption}
         onChange={(e) => setCaption(e.target.value)}
-        placeholder="Ecrire un mot..."
+        placeholder="Write a caption..."
         className="w-full p-3 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors resize-none"
         rows={3}
         required
       />
 
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-700">
-          Partager avec votre famille
-        </label>
+        <div className="flex items-center justify-between">
+          <label className="block text-sm font-medium text-gray-700">
+            Share with families
+          </label>
+          <button
+            type="button"
+            onClick={handleSelectAllFamilies}
+            className="flex items-center gap-2 px-3 py-1.5 text-sm text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+          >
+            <CheckSquare className="w-4 h-4" />
+            {selectAllFamilies ? 'Deselect All' : 'Select All'}
+          </button>
+        </div>
         <div className="space-y-2">
           {families.map((family) => (
             <label
@@ -344,7 +368,7 @@ export const MediaUpload: React.FC<MediaUploadProps> = ({ onSubmit }) => {
             Sharing...
           </>
         ) : (
-          'Partager avec votre famille'
+          'Share with Family'
         )}
       </button>
     </form>
