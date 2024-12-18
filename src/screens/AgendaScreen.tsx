@@ -106,10 +106,10 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
               <CalendarIcon className="w-8 h-8 text-primary-600" />
             </div>
             <h2 className="text-xl font-semibold text-gray-800 mb-2">
-              Select a Family
+              Choisir une famille
             </h2>
             <p className="text-gray-600">
-              Choose a family from the sidebar to view their agenda
+              Choisissez une famille sur la menu à gauche pour voir leur agenda
             </p>
           </div>
         </div>
@@ -136,13 +136,13 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 mb-8">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-semibold text-gray-800">Family Reminders</h2>
+                <h2 className="text-2xl font-semibold text-gray-800">Rappels de la famille</h2>
                 <button
                   onClick={handleAddReminder}
                   className="flex items-center justify-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
                 >
                   <Plus className="w-5 h-5" />
-                  <span>Add Reminder</span>
+                  <span>Ajouter un rappel</span>
                 </button>
               </div>
 
@@ -168,7 +168,7 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                     <ChevronLeft className="w-5 h-5 text-gray-600" />
                   </button>
                   <span className="text-lg font-medium text-gray-700 min-w-[140px] text-center">
-                    {format(currentDate, 'MMMM yyyy')}
+                    {format(currentDate, 'MMMM yyyy', { locale: fr })}
                   </span>
                   <button
                     onClick={handleNextMonth}
@@ -179,14 +179,16 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-7 gap-px bg-gray-200 rounded-lg overflow-hidden relative">
-                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-                  <div
-                    key={day}
-                    className="bg-gray-50 text-center py-3 text-sm font-medium text-gray-500"
-                  >
-                    {day}
-                  </div>
+             <div className="grid grid-cols-7 gap-px bg-gray-200 rounded-lg overflow-hidden relative">
+  {['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'].map((day) => (
+    <div
+      key={day}
+      className="bg-gray-50 text-center py-3 text-sm font-medium text-gray-500"
+    >
+      {day}
+    </div>
+  ))}
+</div>
                 ))}
                 {eachDayOfInterval({ start: startOfMonth(currentDate), end: endOfMonth(currentDate) }).map((day, idx) => (
                   <CalendarDay
