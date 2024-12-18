@@ -2,6 +2,8 @@ import React from 'react';
 import { Clock, Calendar, Trash2 } from 'lucide-react';
 import { useReminders } from '../hooks/useReminders';
 import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';  // Ligne 1
+
 
 interface ReminderListProps {
   familyId: string;
@@ -52,12 +54,12 @@ export const ReminderList: React.FC<ReminderListProps> = ({ familyId }) => {
               <div className="flex items-center gap-4 mt-2">
                 <div className="flex items-center text-sm text-gray-500">
                   <Calendar className="w-4 h-4 mr-1" />
-                  {format(new Date(reminder.date), 'MMM d, yyyy')}
+                  {format(parseISO(reminder.date), 'MMM d, yyyy', { locale: fr })}
                 </div>
                 {reminder.time && (
                   <div className="flex items-center text-sm text-gray-500">
                     <Clock className="w-4 h-4 mr-1" />
-                    {format(new Date(`2000-01-01T${reminder.time}`), 'h:mm a')}
+                    {format(parseISO(`2000-01-01T${reminder.time}`), 'h:mm a', { locale: fr })}
                   </div>
                 )}
               </div>
