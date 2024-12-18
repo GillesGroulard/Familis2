@@ -66,7 +66,7 @@ export const CalendarDay: React.FC<CalendarDayProps> = ({
           >
             {reminder.time && (
               <div className="text-xs text-primary-700 font-medium mb-1">
-                {format(parseISO(`2000-01-01T${reminder.time}`), 'h:mm a')}
+                {format(parseISO(`2000-01-01T${reminder.time}`), 'HH:mm', { locale: fr })}
               </div>
             )}
             <div className={`text-sm text-primary-800 ${
