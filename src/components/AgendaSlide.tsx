@@ -139,10 +139,10 @@ export const AgendaSlide: React.FC<AgendaSlideProps> = ({ reminders }) => {
       <div className="text-center mb-8 animate-fade-in">
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl border-2 border-blue-200 max-w-3xl mx-auto">
           <h1 className="text-6xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent">
-            {format(now, 'h:mm a')}
+            {format(now, 'h:mm a', { locale: fr })}
           </h1>
           <h2 className="text-3xl md:text-4xl text-blue-800">
-            {format(now, 'EEEE, MMMM d')}
+            {format(now, 'EEEE, MMMM d', { locale: fr })}
           </h2>
         </div>
       </div>
