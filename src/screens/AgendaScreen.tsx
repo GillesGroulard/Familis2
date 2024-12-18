@@ -117,111 +117,110 @@ export const AgendaScreen: React.FC<AgendaScreenProps> = ({ familyId }) => {
     );
   }
 
-  const familyReminders = reminders.filter(r => r.target_audience === 'FAMILY' && !r.deleted);
+const familyReminders = reminders.filter(r => r.target_audience === 'FAMILY' && !r.deleted);
 
-  return (
-    <>
-      <SharedSidebar
-        currentFamilyId={familyId}
-        onFamilyChange={handleFamilyChange}
-        onJoinFamily={handleJoinFamily}
-        isCollapsed={isCollapsed}
-        onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
-        currentPage="feed"
-      />
-      
-      <div className={`min-h-screen bg-gray-50 transition-all duration-300 ${!isCollapsed ? 'pl-24' : ''}`}>
-        <div className="container mx-auto px-4 py-8 pb-32">
-          {/* Family Reminders Section */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 mb-8">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-semibold text-gray-800">Rappels de la famille</h2>
-                <button
-                  onClick={handleAddReminder}
-                  className="flex items-center justify-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
-                >
-                  <Plus className="w-5 h-5" />
-                  <span>Ajouter un rappel</span>
-                </button>
-              </div>
-
-              <ReminderList
-                reminders={familyReminders}
-                onDelete={handleDeleteReminder}
-                onDeleteRecurring={handleDeleteRecurring}
-                onTakeCharge={handleTakeCharge}
-              />
+return (
+  <>
+    <SharedSidebar
+      currentFamilyId={familyId}
+      onFamilyChange={handleFamilyChange}
+      onJoinFamily={handleJoinFamily}
+      isCollapsed={isCollapsed}
+      onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
+      currentPage="feed"
+    />
+    
+    <div className={`min-h-screen bg-gray-50 transition-all duration-300 ${!isCollapsed ? 'pl-24' : ''}`}>
+      <div className="container mx-auto px-4 py-8 pb-32">
+        {/* Family Reminders Section */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 mb-8">
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-semibold text-gray-800">Rappels de la famille</h2>
+              <button
+                onClick={handleAddReminder}
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
+              >
+                <Plus className="w-5 h-5" />
+                <span>Ajouter un rappel</span>
+              </button>
             </div>
-          </div>
 
-          {/* Calendar Section */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-semibold text-gray-800">Calendar</h2>
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={handlePrevMonth}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    <ChevronLeft className="w-5 h-5 text-gray-600" />
-                  </button>
-                  <span className="text-lg font-medium text-gray-700 min-w-[140px] text-center">
-                    {format(currentDate, 'MMMM yyyy', { locale: fr })}
-                  </span>
-                  <button
-                    onClick={handleNextMonth}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    <ChevronRight className="w-5 h-5 text-gray-600" />
-                  </button>
-                </div>
-              </div>
-
-             <div className="grid grid-cols-7 gap-px bg-gray-200 rounded-lg overflow-hidden relative">
-  {['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'].map((day) => (
-    <div
-      key={day}
-      className="bg-gray-50 text-center py-3 text-sm font-medium text-gray-500"
-    >
-      {day}
-    </div>
-  ))}
-</div>
-                ))}
-                {eachDayOfInterval({ start: startOfMonth(currentDate), end: endOfMonth(currentDate) }).map((day, idx) => (
-                  <CalendarDay
-                    key={idx}
-                    day={day}
-                    reminders={getRemindersForDate(reminders, day, currentDate)}
-                    isCurrentMonth={isSameMonth(day, currentDate)}
-                    isToday={isSameDay(day, new Date())}
-                    isExpanded={expandedDay ? isSameDay(day, expandedDay) : false}
-                    onClick={() => handleDayClick(day)}
-                  />
-                ))}
-              </div>
-            </div>
+            <ReminderList
+              reminders={familyReminders}
+              onDelete={handleDeleteReminder}
+              onDeleteRecurring={handleDeleteRecurring}
+              onTakeCharge={handleTakeCharge}
+            />
           </div>
         </div>
 
-        {/* Overlay for expanded day */}
-        <div 
-          className={`calendar-overlay ${expandedDay ? 'visible' : ''}`}
-          onClick={() => setExpandedDay(null)}
-        />
+        {/* Calendar Section */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-semibold text-gray-800">Calendar</h2>
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={handlePrevMonth}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <ChevronLeft className="w-5 h-5 text-gray-600" />
+                </button>
+                <span className="text-lg font-medium text-gray-700 min-w-[140px] text-center">
+                  {format(currentDate, 'MMMM yyyy', { locale: fr })}
+                </span>
+                <button
+                  onClick={handleNextMonth}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <ChevronRight className="w-5 h-5 text-gray-600" />
+                </button>
+              </div>
+            </div>
 
-        {success && (
-          <Toast
-            message={success}
-            type="success"
-            onClose={() => setSuccess(null)}
-          />
-        )}
+            <div className="grid grid-cols-7 gap-px bg-gray-200 rounded-lg overflow-hidden relative">
+              {['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'].map((day) => (
+                <div
+                  key={day}
+                  className="bg-gray-50 text-center py-3 text-sm font-medium text-gray-500"
+                >
+                  {day}
+                </div>
+              ))}
+              
+              {eachDayOfInterval({ start: startOfMonth(currentDate), end: endOfMonth(currentDate) }).map((day, idx) => (
+                <CalendarDay
+                  key={idx}
+                  day={day}
+                  reminders={getRemindersForDate(reminders, day, currentDate)}
+                  isCurrentMonth={isSameMonth(day, currentDate)}
+                  isToday={isSameDay(day, new Date())}
+                  isExpanded={expandedDay ? isSameDay(day, expandedDay) : false}
+                  onClick={() => handleDayClick(day)}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
-    </>
-  );
+
+      {/* Overlay for expanded day */}
+      <div 
+        className={`calendar-overlay ${expandedDay ? 'visible' : ''}`}
+        onClick={() => setExpandedDay(null)}
+      />
+
+      {success && (
+        <Toast
+          message={success}
+          type="success"
+          onClose={() => setSuccess(null)}
+        />
+      )}
+    </div>
+  </>
+);
 };
 
 export default AgendaScreen;
