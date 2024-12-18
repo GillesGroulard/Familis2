@@ -1,6 +1,7 @@
 import React from 'react';
 import { format, parseISO } from 'date-fns';
 import type { Reminder } from '../../types';
+import { fr } from 'date-fns/locale';
 
 interface CalendarDayProps {
   day: Date;
