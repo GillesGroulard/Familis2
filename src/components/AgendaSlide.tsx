@@ -102,7 +102,7 @@ export const AgendaSlide: React.FC<AgendaSlideProps> = ({ reminders }) => {
           {reminder.time && (
             <div className="flex items-center gap-2 text-2xl md:text-3xl text-blue-700 font-bold">
               <Clock className="w-8 h-8" />
-              {format(parseISO(`2000-01-01T${reminder.time}`), 'h:mm a')}
+              {format(parseISO(`2000-01-01T${reminder.time}`), 'HH:mm', { locale: fr })}
             </div>
           )}
           {reminder.recurrence_type !== 'NONE' && (
@@ -156,7 +156,7 @@ export const AgendaSlide: React.FC<AgendaSlideProps> = ({ reminders }) => {
               <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
                 <Calendar className="w-6 h-6 text-blue-600" />
               </div>
-              <h2 className="text-3xl font-bold text-blue-800">Today</h2>
+              <h2 className="text-3xl font-bold text-blue-800">Aujourd'hui</h2>
             </div>
             <div className="space-y-4">
               {todayReminders.length > 0 ? (
@@ -164,7 +164,7 @@ export const AgendaSlide: React.FC<AgendaSlideProps> = ({ reminders }) => {
                   <ReminderCard key={reminder.id} reminder={reminder} highlightLevel="high" />
                 ))
               ) : (
-                <p className="text-xl text-gray-500 text-center py-4">No reminders for today</p>
+                <p className="text-xl text-gray-500 text-center py-4">Pas de rappel pour aujourd'hui</p>
               )}
             </div>
           </div>
@@ -175,7 +175,7 @@ export const AgendaSlide: React.FC<AgendaSlideProps> = ({ reminders }) => {
           {/* Tomorrow */}
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-lg border-2 border-blue-100">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-2xl font-bold text-blue-700">Tomorrow</h3>
+                <h3 className="text-2xl font-bold text-blue-700">Demain</h3>
               <ChevronRight className="w-6 h-6 text-blue-400" />
             </div>
             <div className="space-y-4">
@@ -192,7 +192,7 @@ export const AgendaSlide: React.FC<AgendaSlideProps> = ({ reminders }) => {
           {/* Rest of the Week */}
           <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-6 shadow-lg border-2 border-gray-200">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-2xl font-bold text-gray-700">Coming Up</h3>
+              <h3 className="text-2xl font-bold text-gray-700">A venir</h3>
               <ChevronRight className="w-6 h-6 text-gray-400" />
             </div>
             <div className="space-y-4">
@@ -201,7 +201,7 @@ export const AgendaSlide: React.FC<AgendaSlideProps> = ({ reminders }) => {
                   <ReminderCard key={reminder.id} reminder={reminder} />
                 ))
               ) : (
-                <p className="text-lg text-gray-500 text-center py-2">No upcoming reminders</p>
+                <p className="text-lg text-gray-500 text-center py-2">Pas de rappel à venir</p>
               )}
             </div>
           </div>
